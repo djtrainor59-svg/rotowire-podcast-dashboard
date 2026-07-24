@@ -1,4 +1,4 @@
-const { getJSON, setJSON } = require('./_lib/kv');
+﻿const { getJSON, setJSON } = require('./_lib/kv');
 
 const INDEX_KEY = 'revenue:index';
 
@@ -57,4 +57,17 @@ module.exports = async (req, res) => {
       if (bluewireStatus && !['Estimated', 'Finalized'].includes(bluewireStatus)) {
         return res.status(400).json({ error: 'bluewireStatus must be Estimated or Finalized' });
       }
-      await
+      await setJSON(monthKey(month), {
+        shannon: Number(shannon) || 0,
+        bluewire: { amount: Number(bluewireAmount) || 0, status: bluewireStatus || 'Estimated' },
+      });
+      await addToIndex(month);
+      return res.status(200).json({ ok: true });
+    }
+
+    res.setHeader('Allow', 'GET, POST');
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};

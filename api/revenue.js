@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
         { direct: 0, blended: 0 }
       );
 
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+      res.setHeader('Cache-Control', 'res.setHeader('Cache-Control', 'no-store');
       return res.status(200).json({ entries, placementTotals: totals });
     }
 

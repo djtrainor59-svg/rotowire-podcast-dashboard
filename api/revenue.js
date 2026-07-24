@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
         { direct: 0, blended: 0 }
       );
 
-      res.setHeader('Cache-Control', 'res.setHeader('Cache-Control', 'no-store');
+      res.setHeader('Cache-Control', 'no-store');
       return res.status(200).json({ entries, placementTotals: totals });
     }
 
@@ -57,17 +57,4 @@ module.exports = async (req, res) => {
       if (bluewireStatus && !['Estimated', 'Finalized'].includes(bluewireStatus)) {
         return res.status(400).json({ error: 'bluewireStatus must be Estimated or Finalized' });
       }
-      await setJSON(monthKey(month), {
-        shannon: Number(shannon) || 0,
-        bluewire: { amount: Number(bluewireAmount) || 0, status: bluewireStatus || 'Estimated' },
-      });
-      await addToIndex(month);
-      return res.status(200).json({ ok: true });
-    }
-
-    res.setHeader('Allow', 'GET, POST');
-    return res.status(405).json({ error: 'Method not allowed' });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-};
+      await

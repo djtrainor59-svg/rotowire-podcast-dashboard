@@ -1,28 +1,29 @@
 const { getJSON, setJSON } = require('./_lib/kv');
-const { FIXED_START } = require('./_lib/dates');
+
+const INDEX_KEY = 'revenue:index';
 
 function monthKey(yyyyMm) {
   return `revenue:${yyyyMm}`;
 }
 
-// All calendar months from FIXED_START's month through the current month.
-function monthList() {
-  const months = [];
-  const start = new Date(FIXED_START + 'T00:00:00Z');
-  const now = new Date();
-  const cursor = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
-  const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
-  while (cursor <= end) {
-    months.push(`${cursor.getUTCFullYear()}-${String(cursor.getUTCMonth() + 1).padStart(2, '0')}`);
-    cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+async function loadIndex() {
+  const idx = await getJSON(INDEX_KEY);
+  return Array.isArray(idx) ? idx : [];
+}
+
+async function addToIndex(month) {
+  const idx = await loadIndex();
+  if (!idx.includes(month)) {
+    idx.push(month);
+    idx.sort();
+    await setJSON(INDEX_KEY, idx);
   }
-  return months;
 }
 
 module.exports = async (req, res) => {
   try {
     if (req.method === 'GET') {
-      const months = monthList();
+      const months = await loadIndex();
       const entries = await Promise.all(
         months.map(async (m) => {
           const data = await getJSON(monthKey(m));
@@ -60,6 +61,7 @@ module.exports = async (req, res) => {
         shannon: Number(shannon) || 0,
         bluewire: { amount: Number(bluewireAmount) || 0, status: bluewireStatus || 'Estimated' },
       });
+      await addToIndex(month);
       return res.status(200).json({ ok: true });
     }
 

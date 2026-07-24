@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RotoWire Podcast Network — Performance Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <span class="brand-mark">RW</span>
+    <div class="brand-text">
+      <h1>Podcast Network</h1>
+      <p>Downloads &amp; Ad Revenue — Performance Dashboard</p>
+    </div>
+  </div>
+  <div class="header-controls">
+    <div class="range-pills" role="group" aria-label="Date range">
+      <button class="pill" data-range="7d">7D</button>
+      <button class="pill" data-range="30d">30D</button>
+      <button class="pill" data-range="90d">90D</button>
+      <button class="pill" data-range="all">ALL</button>
+    </div>
+    <div class="refresh-status">
+      <span id="last-refreshed">—</span>
+      <button id="refresh-btn" aria-label="Refresh data">↻</button>
+    </div>
+  </div>
+</header>
+
+<!-- Signature element: a live scores-ticker strip across all 8 shows -->
+<div class="ticker-wrap" aria-label="Per-show download totals">
+  <div class="ticker" id="ticker"></div>
+</div>
+
+<main>
+
+  <section class="scoreboard">
+    <div class="score-card headline">
+      <span class="score-label">Total Downloads</span>
+      <span class="score-value" id="total-downloads">—</span>
+      <span class="score-sub" id="total-range-label">—</span>
+    </div>
+    <div class="score-card chart-card">
+      <span class="score-label">Daily Downloads, All Shows</span>
+      <svg id="agg-chart" viewBox="0 0 640 160" preserveAspectRatio="none"></svg>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Downloads by Show</h2>
+    <div id="show-bars" class="show-bars"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header-row">
+      <h2>Episode Leaderboard</h2>
+      <p class="panel-note">What's actually pulling people in — like checking which subject line got opened.</p>
+    </div>
+    <table class="leaderboard" id="leaderboard-table">
+      <thead>
+        <tr>
+          <th class="rank-col">#</th>
+          <th>Episode</th>
+          <th>Show</th>
+          <th>Published</th>
+          <th class="num-col">Downloads</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body"></tbody>
+    </table>
+  </section>
+
+  <section class="panel revenue-panel">
+    <h2>Ad Revenue</h2>
+
+    <div class="revenue-grid">
+      <div class="revenue-block">
+        <h3>Placement Split</h3>
+        <div class="placement-bar" id="placement-bar"></div>
+        <div class="placement-legend" id="placement-legend"></div>
+      </div>
+
+      <div class="revenue-block">
+        <h3>Monthly Trend</h3>
+        <div class="revenue-trend" id="revenue-trend"></div>
+      </div>
+    </div>
+
+    <div class="revenue-entry">
+      <h3>Add / Update Monthly Figures</h3>
+      <form id="revenue-form">
+        <label>
+          Month
+          <input type="month" name="month" required />
+        </label>
+        <label>
+          Shannon (Direct) — $
+          <input type="number" name="shannon" min="0" step="1" required />
+        </label>
+        <label>
+          BlueWire (Blended Rolls) — $
+          <input type="number" name="bluewireAmount" min="0" step="1" required />
+        </label>
+        <label>
+          BlueWire Status
+          <select name="bluewireStatus">
+            <option value="Estimated">Estimated</option>
+            <option value="Finalized">Finalized</option>
+          </select>
+        </label>
+        <button type="submit">Save</button>
+        <span id="revenue-form-status"></span>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>

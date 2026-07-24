@@ -1,0 +1,9 @@
+{
+  "name": "rotowire-podcast-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RotoWire Podcast Network downloads & ad revenue dashboard",
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  }
+}
